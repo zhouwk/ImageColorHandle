@@ -10,11 +10,9 @@ import Foundation
 import UIKit
 
 extension UIImage {
-    
-    // =============================自动申请内存，全局保留上下文引用
-    
-    /// 把图片信息存入内存中
-    func convertToData() -> CGContext? {
+        
+    /// 采用自动申请内存的方式把图片信息存入位图上下文中
+    func convertToDataAutoMallocMemory() -> CGContext? {
         
         guard let cgImage = cgImage else {
             return nil
@@ -28,6 +26,25 @@ extension UIImage {
                             bitmapInfo: cgImage.bitmapInfo.rawValue)!
         ctx.draw(cgImage, in: CGRect(origin: .zero, size: size))
         return ctx
+    }
+    
+    /// 采用手动申请内存的方式将图片信息存入位图上下文中
+    func convertToDataManualMallocMemory() -> UnsafeMutableRawPointer? {
+        
+        guard let cgImage = cgImage else {
+            return nil
+        }
+        let length = cgImage.height * cgImage.bytesPerRow
+        let data = malloc(length)
+        memset(data, 0, length)
+        let ctx = CGContext(data: data, width: cgImage.width,
+                            height: cgImage.height,
+                            bitsPerComponent: cgImage.bitsPerComponent,
+                            bytesPerRow: cgImage.bytesPerRow,
+                            space: cgImage.colorSpace!,
+                            bitmapInfo: cgImage.bitmapInfo.rawValue)!
+        ctx.draw(cgImage, in: CGRect(origin: .zero, size: size))
+        return data
     }
     
     /**
@@ -67,29 +84,6 @@ extension UIImage {
         }
     }
     
-    
-    //=========================手动申请内存
-    
-    
-    /// 将图片信息存入内存中，手动输入内存
-    func convertToData2() -> UnsafeMutableRawPointer? {
-        
-        guard let cgImage = cgImage else {
-            return nil
-        }
-        let data = malloc(cgImage.height * cgImage.bytesPerRow)
-        let ctx = CGContext(data: data, width: cgImage.width,
-                            height: cgImage.height,
-                            bitsPerComponent: cgImage.bitsPerComponent,
-                            bytesPerRow: cgImage.bytesPerRow,
-                            space: cgImage.colorSpace!,
-                            bitmapInfo: cgImage.bitmapInfo.rawValue)!
-        ctx.draw(cgImage, in: CGRect(origin: .zero, size: size))
-        return data
-
-    }
-    
-    
     /**
      * 遍历位图上下文申请内存的所有颜色信息，并且抛给调用者，再对应指针位置存储新的颜色信息
      para data: 位图上下文
@@ -126,7 +120,6 @@ extension UIImage {
         }
     }
 
-    
     /// 渲染位图上下文
     static func render(_ data: UnsafeMutableRawPointer, source: CGImage) -> UIImage? {
         

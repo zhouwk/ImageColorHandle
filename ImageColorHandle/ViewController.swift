@@ -14,14 +14,16 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var reversalColorImageView: UIImageView!
     @IBOutlet weak var grayImageView: UIImageView!
-    var ctxA: CGContext!
-    var ctxB: CGContext!
+    
+    
+    var dataA: UnsafeMutableRawPointer!
+    var dataB: UnsafeMutableRawPointer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        testAuto()
-//        testManual()
+//        testAuto()
+        testManual()
         
     }
     
@@ -30,7 +32,7 @@ class ViewController: UIViewController {
     func testAuto() {
         
         let image = UIImage(named: "girl2.jpg")!
-        ctxA = image.convertToData()!
+        let ctxA = image.convertToDataAutoMallocMemory()!
         UIImage.traversePixels(ctxA) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
             
             let newColorInfo = Int(red) * 77 / 255 + Int(green) * 151 / 255 + Int(blue) * 88 / 255
@@ -39,7 +41,7 @@ class ViewController: UIViewController {
         }
         grayImageView.image = UIImage(cgImage: ctxA.makeImage()!)
         
-        ctxB = image.convertToData()!
+        let ctxB = image.convertToDataAutoMallocMemory()!
         UIImage.traversePixels(ctxB) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
             return (255 - red, 255 - green, 255 - blue, alpha)
         }
@@ -50,24 +52,34 @@ class ViewController: UIViewController {
     func testManual() {
         
         let image = UIImage(named: "girl2.jpg")!
-        var data = image.convertToData44()!
-        UIImage.traversePixels(data, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
+        dataA = image.convertToDataManualMallocMemory()!
+        print(dataA)
+        UIImage.traversePixels(dataA, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
 
             let newColorInfo = Int(red) * 77 / 255 + Int(green) * 151 / 255 + Int(blue) * 88 / 255
             let gray = CUnsignedChar(newColorInfo > 255 ? 255 : newColorInfo)
             return (gray, gray, gray, alpha)
 
         }
-        grayImageView.image = UIImage.render(data,
+        grayImageView.image = UIImage.render(dataA,
                                              source: image.cgImage!)
-
-        free(data)
-        data = image.convertToData2()!
-        UIImage.traversePixels44(data, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
+        
+        dataB = image.convertToDataManualMallocMemory()!
+        print(dataB)
+        UIImage.traversePixels(dataB, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
             return (255 - red, 255 - green, 255 - blue, alpha)
         }
-        reversalColorImageView.image = UIImage.render44(data,
+        reversalColorImageView.image = UIImage.render(dataB,
                                                       source: image.cgImage!)
-        free(data)
+    }
+    
+    
+    deinit {
+        free(dataA)
+        free(dataB)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        dismiss(animated: true, completion: nil)
     }
 }

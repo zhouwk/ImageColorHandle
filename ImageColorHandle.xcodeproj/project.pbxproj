@@ -14,6 +14,7 @@
 		F40D5C022188475600FD7B09 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F40D5C002188475600FD7B09 /* LaunchScreen.storyboard */; };
 		F40D5C0A2188478F00FD7B09 /* UIImageColorHandleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D5C092188478F00FD7B09 /* UIImageColorHandleExtension.swift */; };
 		F40D5C0C218847FD00FD7B09 /* girl2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F40D5C0B218847FD00FD7B09 /* girl2.jpg */; };
+		F4D1AED6218996DB0001682E /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D1AED5218996DB0001682E /* RootViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		F40D5C032188475600FD7B09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F40D5C092188478F00FD7B09 /* UIImageColorHandleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageColorHandleExtension.swift; sourceTree = "<group>"; };
 		F40D5C0B218847FD00FD7B09 /* girl2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = girl2.jpg; sourceTree = "<group>"; };
+		F4D1AED5218996DB0001682E /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		F40D5BF62188474A00FD7B09 /* ImageColorHandle */ = {
 			isa = PBXGroup;
 			children = (
+				F4D1AED5218996DB0001682E /* RootViewController.swift */,
 				F40D5C0B218847FD00FD7B09 /* girl2.jpg */,
 				F40D5BF72188474A00FD7B09 /* AppDelegate.swift */,
 				F40D5BF92188474A00FD7B09 /* ViewController.swift */,
@@ -144,6 +147,7 @@
 			files = (
 				F40D5C0A2188478F00FD7B09 /* UIImageColorHandleExtension.swift in Sources */,
 				F40D5BFA2188474A00FD7B09 /* ViewController.swift in Sources */,
+				F4D1AED6218996DB0001682E /* RootViewController.swift in Sources */,
 				F40D5BF82188474A00FD7B09 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
