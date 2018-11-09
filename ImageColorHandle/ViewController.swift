@@ -15,10 +15,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var reversalColorImageView: UIImageView!
     @IBOutlet weak var grayImageView: UIImageView!
     
-    
-    var dataA: UnsafeMutableRawPointer!
-    var dataB: UnsafeMutableRawPointer!
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,7 +22,6 @@ class ViewController: UIViewController {
         testManual()
         
     }
-    
     
     /// 测试自动上下文自动申请内存
     func testAuto() {
@@ -52,8 +47,7 @@ class ViewController: UIViewController {
     func testManual() {
         
         let image = UIImage(named: "girl2.jpg")!
-        dataA = image.convertToDataManualMallocMemory()!
-        print(dataA)
+        let dataA = image.convertToDataManualMallocMemory()!
         UIImage.traversePixels(dataA, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) in
 
             let newColorInfo = Int(red) * 77 / 255 + Int(green) * 151 / 255 + Int(blue) * 88 / 255
@@ -61,11 +55,10 @@ class ViewController: UIViewController {
             return (gray, gray, gray, alpha)
 
         }
+
         grayImageView.image = UIImage.render(dataA,
                                              source: image.cgImage!)
-        
-        dataB = image.convertToDataManualMallocMemory()!
-        print(dataB)
+        let dataB = image.convertToDataManualMallocMemory()!
         UIImage.traversePixels(dataB, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) in
             return (255 - red, 255 - green, 255 - blue, alpha)
         }
@@ -75,8 +68,6 @@ class ViewController: UIViewController {
     
     
     deinit {
-        free(dataA)
-        free(dataB)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

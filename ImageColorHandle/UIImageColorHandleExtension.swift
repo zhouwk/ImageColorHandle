@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UIImage {
-        
+    
     /// 采用自动申请内存的方式把图片信息存入位图上下文中
     func convertToDataAutoMallocMemory() -> CGContext? {
         
