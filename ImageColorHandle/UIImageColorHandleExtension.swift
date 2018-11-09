@@ -53,7 +53,7 @@ extension UIImage {
      handler: 处理闭包
      */
     static func traversePixels(_ ctx: CGContext,
-                               handler: (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)?) {
+                               handler: ((CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar))?) {
         
         guard let data = ctx.data else {
             return
@@ -70,7 +70,7 @@ extension UIImage {
                 let alpha = data.load(fromByteOffset: bitMapIndex + 3, as: CUnsignedChar.self)
                 
                 // 将修改后的RGBA存入这块内存
-                if let newRGBA = handler(red, green, blue, alpha) {
+                if let newRGBA = handler?(red, green, blue, alpha) {
                     data.storeBytes(of: newRGBA.0, toByteOffset: bitMapIndex,
                                     as: CUnsignedChar.self)
                     data.storeBytes(of: newRGBA.1, toByteOffset: bitMapIndex + 1,
@@ -92,7 +92,7 @@ extension UIImage {
      */
     static func traversePixels(_ data: UnsafeMutableRawPointer,
                                source: CGImage,
-                               handler: (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)?) {
+                               handler: ((CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar))?) {
             
         for row in 0 ..< source.height {
             for column in 0 ..< source.width {
@@ -106,7 +106,7 @@ extension UIImage {
                 let alpha = data.load(fromByteOffset: bitMapIndex + 3, as: CUnsignedChar.self)
 
                 // 将修改后的RGBA存入这块内存
-                if let newRGBA = handler(red, green, blue, alpha) {
+                if let newRGBA = handler?(red, green, blue, alpha) {
                     data.storeBytes(of: newRGBA.0, toByteOffset: bitMapIndex,
                                     as: CUnsignedChar.self)
                     data.storeBytes(of: newRGBA.1, toByteOffset: bitMapIndex + 1,

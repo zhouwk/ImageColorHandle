@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         
         let image = UIImage(named: "girl2.jpg")!
         let ctxA = image.convertToDataAutoMallocMemory()!
-        UIImage.traversePixels(ctxA) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
+        UIImage.traversePixels(ctxA) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) in
             
             let newColorInfo = Int(red) * 77 / 255 + Int(green) * 151 / 255 + Int(blue) * 88 / 255
             let gray = CUnsignedChar(newColorInfo > 255 ? 255 : newColorInfo)
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
         grayImageView.image = UIImage(cgImage: ctxA.makeImage()!)
         
         let ctxB = image.convertToDataAutoMallocMemory()!
-        UIImage.traversePixels(ctxB) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
+        UIImage.traversePixels(ctxB) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) in
             return (255 - red, 255 - green, 255 - blue, alpha)
         }
         reversalColorImageView.image = UIImage(cgImage: ctxB.makeImage()!)
@@ -54,7 +54,7 @@ class ViewController: UIViewController {
         let image = UIImage(named: "girl2.jpg")!
         dataA = image.convertToDataManualMallocMemory()!
         print(dataA)
-        UIImage.traversePixels(dataA, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
+        UIImage.traversePixels(dataA, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) in
 
             let newColorInfo = Int(red) * 77 / 255 + Int(green) * 151 / 255 + Int(blue) * 88 / 255
             let gray = CUnsignedChar(newColorInfo > 255 ? 255 : newColorInfo)
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
         
         dataB = image.convertToDataManualMallocMemory()!
         print(dataB)
-        UIImage.traversePixels(dataB, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar)? in
+        UIImage.traversePixels(dataB, source: image.cgImage!) { (red, green, blue, alpha) -> (CUnsignedChar, CUnsignedChar, CUnsignedChar, CUnsignedChar) in
             return (255 - red, 255 - green, 255 - blue, alpha)
         }
         reversalColorImageView.image = UIImage.render(dataB,
